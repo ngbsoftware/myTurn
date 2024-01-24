@@ -1,11 +1,11 @@
 package com.ngbsoftware.myTurn.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.lang.annotation.Documented;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "shop")
@@ -17,7 +17,7 @@ public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private int id;
 
     @Column(name = "name")
     private String name;
@@ -43,18 +43,30 @@ public class Shop {
     @Column(name = "close_time")
     private String closeTime;
 
-    public Shop(){}
+    @OneToMany(cascade = CascadeType.ALL)
+    private Set<Appointment> appointments;
 
-    public Shop(String name, String address, String city, String region, String country, String phone, String openTime, String closeTime) {
-        this.name = name;
-        this.address = address;
-        this.city = city;
-        this.region = region;
-        this.country = country;
-        this.phone = phone;
-        this.openTime = openTime;
-        this.closeTime = closeTime;
+    public void add(Appointment appointment) {
+        if (appointment != null) {
+            appointments = new HashSet<>();
+        }
+
+        appointments.add(appointment);
+        appointment.setProvider(this);
     }
+//    public Shop() {
+//    }
+//
+//    public Shop(String name, String address, String city, String region, String country, String phone, String openTime, String closeTime) {
+//        this.name = name;
+//        this.address = address;
+//        this.city = city;
+//        this.region = region;
+//        this.country = country;
+//        this.phone = phone;
+//        this.openTime = openTime;
+//        this.closeTime = closeTime;
+//    }
 
 //    public Long getId() {
 //        return id;
